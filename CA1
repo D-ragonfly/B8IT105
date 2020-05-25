@@ -66,3 +66,38 @@ def main():
 if __name__=='__main__':
     main()
 
+
+import sys
+sys.path.append(r'C:\Users\hanna\Desktop\Big Data for Data Analytics')
+
+import unittest
+import mountains
+
+class Testscraping_output(unittest.TestCase):
+    
+    def setUp(self):
+        self.contents = mountains.get_page_contents()
+   
+    
+    def test_length(self):
+        myfile = open(r'C:\Users\hanna\Desktop\Big Data for Data Analytics\mountains_csv.csv', 'r')
+        count = 0
+        for line in myfile: count += 1
+        self.assertEqual(123, count)
+ 
+    def test_last_row(self):
+        myfile = open(r'C:\Users\hanna\Desktop\Big Data for Data Analytics\mountains_csv.csv', 'r')
+        ls = [line.strip() for line in myfile]
+        last_peak = str(ls[-1]).split(',')[0].split('"')[1]
+        self.assertEqual('Marmolejo', last_peak) 
+        
+
+    def test_get_page(self):
+        self.assertTrue(len(self.contents) > 0)
+
+    def test_convert_to_soup(self):
+        self.assertTrue(mountains.convert_to_soup(self.contents) is not None)
+
+        
+if __name__=='__main__':
+    unittest.main()
