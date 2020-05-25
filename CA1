@@ -1,46 +1,45 @@
 
 from bs4 import BeautifulSoup
 import requests
-
-def main():
     
-    cookies = {
-        'crfgL0cSt0r': 'true',
-        '_ga': 'GA1.2.1745678938.1585946744',
-        '_gid': 'GA1.2.1540787982.1585946744',
-        '_gat_UA-350786-1': '1',
-        '_omappvp': 'ZLvCBHFeNtOj9dLmFBw0bBOWQe1quepQufnswkcwKAziaNIdAjDDPnZQeWQ8T9Ud78RPUWNWCtXMKfcd4wpQRcDdUZMMZSCH',
-        'pwUID': '978598471705921',
-        'euconsent': 'BOxTETDOxTETDC5ABAENDE-AAAAu17_______9______9uz_Ov_v_f__33e8__9v_l_7_-___u_-33d4u_1vf99yfm1-7etr3tp_87ues2_Xur__71__3z3_9pxP78k89r7337Ew_v-_v-b7BCPN9Y3v-8A',
-        '__gads': 'ID=e9dce73c603ed291:T=1585946748:S=ALNI_MZdwMaHMFPB2GlJqXBIaAlg0q5OHg',
-        '_omappvs': '1585946756699',
-        'playwirePageViews': '2',
-        '__atuvc': '2^%^7C14',
-        '__atuvs': '5e87a0779df68f01001',
+cookies = {
+    'crfgL0cSt0r': 'true',
+    '_ga': 'GA1.2.1745678938.1585946744',
+    '_gid': 'GA1.2.1540787982.1585946744',
+    '_gat_UA-350786-1': '1',
+    '_omappvp': 'ZLvCBHFeNtOj9dLmFBw0bBOWQe1quepQufnswkcwKAziaNIdAjDDPnZQeWQ8T9Ud78RPUWNWCtXMKfcd4wpQRcDdUZMMZSCH',
+    'pwUID': '978598471705921',
+    'euconsent': 'BOxTETDOxTETDC5ABAENDE-AAAAu17_______9______9uz_Ov_v_f__33e8__9v_l_7_-___u_-33d4u_1vf99yfm1-7etr3tp_87ues2_Xur__71__3z3_9pxP78k89r7337Ew_v-_v-b7BCPN9Y3v-8A',
+    '__gads': 'ID=e9dce73c603ed291:T=1585946748:S=ALNI_MZdwMaHMFPB2GlJqXBIaAlg0q5OHg',
+    '_omappvs': '1585946756699',
+    'playwirePageViews': '2',
+    '__atuvc': '2^%^7C14',
+    '__atuvs': '5e87a0779df68f01001',
     }
     
-    headers = {
-        'Connection': 'keep-alive',
-        'Cache-Control': 'max-age=0',
-        'Upgrade-Insecure-Requests': '1',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36',
-        'Sec-Fetch-Dest': 'document',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-        'Sec-Fetch-Site': 'none',
-        'Sec-Fetch-Mode': 'navigate',
-        'Sec-Fetch-User': '?1',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'If-None-Match': '^\\^1585927076^\\^',
-    }
-    
-    response = requests.get('https://www.infoplease.com/world/world-geography/highest-mountain-peaks-world', headers=headers, cookies=cookies)
-        
-    soup = BeautifulSoup(response.content, 'html.parser')
-    
-    scraping_output()
-        
+headers = {
+    'Connection': 'keep-alive',
+    'Cache-Control': 'max-age=0',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36',
+    'Sec-Fetch-Dest': 'document',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+    'Sec-Fetch-Site': 'none',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-User': '?1',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'If-None-Match': '^\\^1585927076^\\^',
+}
+ 
+def get_page_contents():
+    response = requests.get('https://www.infoplease.com/world/world-geography/highest-mountain-peaks-world', headers=headers)
+    return response.content
 
-def scraping_output():
+def convert_to_soup(content):
+    return BeautifulSoup(content, features="html.parser")
+     
+
+def scraping_output(soup):
     
     with open(r'C:\Users\hanna\Desktop\Big Data for Data Analytics\mountains_csv.csv', 'w') as f:
     
@@ -59,27 +58,11 @@ def scraping_output():
             if i%5 ==0:
                 print(file = f)
 
+def main():
+    contents = get_page_contents()
+    soup = convert_to_soup(contents)
+    scraping_output(soup)
 
-main()
-
-
-import unittest
-
-class Testscraping_output(unittest.TestCase):
-    
-    def test_length(self):
-        myfile = open(r'C:\Users\hanna\Desktop\Big Data for Data Analytics\mountains_csv.csv', 'r')
-        count = 0
-        for line in myfile: count += 1
-        self.assertEqual(123, count)
- 
-    def test_last_row(self):
-        myfile = open(r'C:\Users\hanna\Desktop\Big Data for Data Analytics\mountains_csv.csv', 'r')
-        ls = [line.strip() for line in myfile]
-        last_peak = str(ls[-1]).split(',')[0].split('"')[1]
-        self.assertEqual('Marmolejo', last_peak)        
-        
 if __name__=='__main__':
-    unittest.main()
-
+    main()
 
